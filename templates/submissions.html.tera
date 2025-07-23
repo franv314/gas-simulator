@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="/styles/flipdown.css">
+    <link rel="stylesheet" href="/styles/ranking.css">
+    <script src="/scripts/jsonform.js"></script>
+    <script src="/scripts/headerfooter.js"></script>
+    <script src="/scripts/flipdown.js"></script>
+    <script src="/scripts/ranking.js"></script>
+    <title>{{contest.name}}</title>
+  </head>
+  <body>
+    {% include "header" %}
+
+    {{ subs | json_encode | safe }}
+
+    {{ jollies | json_encode | safe }}
+
+    {% include "footer" %}
+  </body>
+</html>

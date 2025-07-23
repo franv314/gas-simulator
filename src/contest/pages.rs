@@ -9,6 +9,8 @@ use rocket_dyn_templates::Template;
 
 use super::fetch::{fetch_contest, fetch_contest_with_ranking};
 use crate::api::ApiUser;
+use crate::contest::fetch::fetch_jollies;
+use crate::contest::fetch::fetch_submissions;
 use crate::error::IntoStatusResult;
 use crate::{model, DB};
 
@@ -50,6 +52,36 @@ async fn contest_settings(id: i32, user: Option<ApiUser>, mut db: Connection<DB>
     }
 }
 
+#[get("/submissions/<id>")]
+async fn contest_submissions(id: i32, user: Option<ApiUser>, mut db: Connection<DB>) -> Result<Template, Status> {
+    let Some(user) = user else {
+        return Err(Status::Unauthorized)
+    };
+
+    let Some(contest) = fetch_contest(&mut db, user.user_id, id)
+        .await
+        .attach_info(Status::InternalServerError, "")?
+    else {
+        return Err(Status::NotFound);
+    };
+
+    let Some(subs) = fetch_submissions(&mut db, user.user_id, id)
+        .await
+        .attach_info(Status::InternalServerError, "")?
+    else {
+        return Err(Status::NotFound);
+    };
+
+    let Some(jollies) = fetch_jollies(&mut db, user.user_id, id)
+        .await
+        .attach_info(Status::InternalServerError, "")?
+    else {
+        return Err(Status::NotFound);
+    };
+
+    Ok(Template::render("submissions", context! { contest, subs, jollies, user }))
+}
+
 #[get("/")]
 async fn show_contest_list(mut db: Connection<DB>, user: Option<ApiUser>) -> Result<Template, Status> {
     use crate::schema::contests;
@@ -86,5 +118,5 @@ async fn show_contest_list(mut db: Connection<DB>, user: Option<ApiUser>) -> Res
 }
 
 pub fn routes() -> Vec<Route> {
-    routes![create_contest, show_contest, contest_settings, show_contest_list,]
+    routes![create_contest, show_contest, contest_settings, show_contest_list, contest_submissions]
 }

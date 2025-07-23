@@ -26,6 +26,22 @@ pub struct TeamQuestion {
 }
 
 #[derive(Clone, Serialize, Deserialize)]
+pub struct Submission {
+    pub id: i32,
+    pub given_answer: i32,
+    pub question_pos: i32,
+    pub correct: bool,
+    pub team_name: String,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
+pub struct Jolly {
+    pub id: i32,
+    pub question_pos: i32,
+    pub team_name: String,
+}
+
+#[derive(Clone, Serialize, Deserialize)]
 pub struct Team {
     pub id: i32,
     pub name: String,

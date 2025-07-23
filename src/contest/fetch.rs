@@ -1,4 +1,5 @@
 use std::cmp;
+use std::collections::HashMap;
 
 use chrono::TimeDelta;
 use diesel::{ExpressionMethods, QueryDsl};
@@ -7,8 +8,8 @@ use rocket_db_pools::Connection;
 use tracing::info;
 
 use super::contest::{Contest, Question, Team};
-use crate::contest::contest::{QuestionStatus, TeamQuestion};
-use crate::model::{self, ContestJollies, ContestSubmissions};
+use crate::contest::contest::{Jolly, QuestionStatus, Submission, TeamQuestion};
+use crate::model::{self, ContestJolly, ContestSubmission};
 
 use crate::DB;
 
@@ -34,7 +35,7 @@ pub async fn fetch_contest(db: &mut Connection<DB>, user_id: i32, id: i32) -> an
             contests::contest_bonus,
             contests::owner_id,
         ))
-        .filter(contests::dsl::id.eq(id))
+        .filter(contests::id.eq(id))
         .filter(contests::active.eq(true))
         .load::<model::Contest>(db)
         .await?;
@@ -104,6 +105,122 @@ pub async fn fetch_contest(db: &mut Connection<DB>, user_id: i32, id: i32) -> an
     }))
 }
 
+
+pub async fn fetch_submissions(db: &mut Connection<DB>, user_id: i32, id: i32) -> anyhow::Result<Option<Vec<Submission>>> {
+    use crate::schema::{contests, questions, submissions, teams};
+
+    let contest_owner = contests::dsl::contests
+        .select(contests::owner_id)
+        .filter(contests::id.eq(id))
+        .filter(contests::active.eq(true))
+        .load::<i32>(db)
+        .await?;
+
+    let Some(contest_owner) = contest_owner.get(0) else {
+        return Ok(None);
+    };
+
+    if *contest_owner != user_id {
+        return Ok(None);
+    }
+
+    let teams = teams::dsl::teams
+        .select((
+            teams::position,
+            teams::team_name,
+        ))
+        .filter(teams::contest_id.eq(id))
+        .filter(teams::is_fake.eq(false))
+        .load::<(i32, String)>(db)
+        .await?
+        .into_iter()
+        .collect::<HashMap<i32, String>>();
+    
+    let submissions = submissions::dsl::submissions
+        .inner_join(questions::table)
+        .inner_join(teams::table)
+        .select((
+            submissions::id,
+            submissions::answer,
+            submissions::sub_time,
+            questions::answer,
+            questions::position,
+            teams::position,
+            teams::is_fake,
+            teams::contest_id,
+        ))
+        .filter(teams::contest_id.eq(id))
+        .filter(teams::is_fake.eq(false))
+        .order((submissions::sub_time.asc(), submissions::id.asc()))
+        .load::<ContestSubmission>(db)
+        .await
+        .map(|subs| subs.into_iter().map(|sub| Submission {
+            id: sub.id,
+            given_answer: sub.given_answer,
+            correct: sub.given_answer == sub.correct_answer,
+            question_pos: sub.question_pos,
+            team_name: teams[&sub.team_pos].clone(),
+        }))?
+        .collect::<Vec<_>>();
+
+    Ok(Some(submissions))
+}
+
+pub async fn fetch_jollies(db: &mut Connection<DB>, user_id: i32, id: i32) -> anyhow::Result<Option<Vec<Jolly>>> {
+    use crate::schema::{contests, questions, jollies, teams};
+
+    let contest_owner = contests::dsl::contests
+        .select(contests::owner_id)
+        .filter(contests::id.eq(id))
+        .filter(contests::active.eq(true))
+        .load::<i32>(db)
+        .await?;
+
+    let Some(contest_owner) = contest_owner.get(0) else {
+        return Ok(None);
+    };
+
+    if *contest_owner != user_id {
+        return Ok(None);
+    }
+
+    let teams = teams::dsl::teams
+        .select((
+            teams::position,
+            teams::team_name,
+        ))
+        .filter(teams::contest_id.eq(id))
+        .filter(teams::is_fake.eq(false))
+        .load::<(i32, String)>(db)
+        .await?
+        .into_iter()
+        .collect::<HashMap<i32, String>>();
+    
+    let jollies = jollies::dsl::jollies
+        .inner_join(questions::table)
+        .inner_join(teams::table)
+        .select((
+            jollies::id,
+            jollies::sub_time,
+            questions::position,
+            teams::position,
+            teams::contest_id,
+        ))
+        .filter(teams::contest_id.eq(id))
+        .filter(teams::is_fake.eq(false))
+        .order((jollies::sub_time.asc(), jollies::id.asc()))
+        .load::<ContestJolly>(db)
+        .await
+        .map(|jollies| jollies.into_iter().map(|jolly| Jolly {
+            id: jolly.id,
+            question_pos: jolly.question_pos,
+            team_name: teams[&jolly.team_pos].clone(),
+        }))?
+        .collect::<Vec<_>>();
+
+    Ok(Some(jollies))
+}
+
 pub async fn fetch_contest_with_ranking(db: &mut Connection<DB>, user_id: i32, id: i32) -> anyhow::Result<Option<Contest>> {
     use crate::schema::{jollies, questions, submissions, teams};
 
@@ -128,6 +245,7 @@ pub async fn fetch_contest_with_ranking(db: &mut Connection<DB>, user_id: i32, i
         .inner_join(questions::table)
         .inner_join(teams::table)
         .select((
+            submissions::id,
             submissions::answer,
             submissions::sub_time,
             questions::answer,
@@ -139,13 +257,14 @@ pub async fn fetch_contest_with_ranking(db: &mut Connection<DB>, user_id: i32, i
         .filter(teams::contest_id.eq(id))
         .filter(submissions::sub_time.le(now))
         .order((submissions::sub_time.asc(), submissions::id.asc()))
-        .load::<ContestSubmissions>(db)
+        .load::<ContestSubmission>(db)
         .await?;
 
     let jollies = jollies::dsl::jollies
         .inner_join(questions::table)
         .inner_join(teams::table)
         .select((
+            jollies::id,
             jollies::sub_time,
             questions::position,
             teams::position,
@@ -153,7 +272,7 @@ pub async fn fetch_contest_with_ranking(db: &mut Connection<DB>, user_id: i32, i
         ))
         .filter(teams::contest_id.eq(id))
         .filter(jollies::sub_time.le(now))
-        .load::<ContestJollies>(db)
+        .load::<ContestJolly>(db)
         .await?;
 
     let drift_no = *drift;

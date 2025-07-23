@@ -79,7 +79,8 @@ pub struct Token {
 }
 
 #[derive(Queryable, Clone, Copy)]
-pub struct ContestSubmissions {
+pub struct ContestSubmission {
+    pub id: i32,
     pub given_answer: i32,
     pub sub_time: DateTime<Utc>,
     pub correct_answer: i32,
@@ -90,7 +91,8 @@ pub struct ContestSubmissions {
 }
 
 #[derive(Queryable, Clone, Copy)]
-pub struct ContestJollies {
+pub struct ContestJolly {
+    pub id: i32,
     pub sub_time: DateTime<Utc>,
     pub question_pos: i32,
     pub team_pos: i32,
