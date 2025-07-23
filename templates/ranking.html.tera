@@ -1,230 +1,156 @@
-<!DOCTYPE html>
-<html lang="it">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/styles/flipdown.css">
-    <link rel="stylesheet" href="/styles/ranking.css">
-    <script src="/scripts/jsonform.js"></script>
-    <script src="/scripts/headerfooter.js"></script>
-    <script src="/scripts/flipdown.js"></script>
-    <script src="/scripts/ranking.js"></script>
-    <title>{{contest.name}}</title>
-  </head>
-  <body>
-    {% include "header" %}
-
-    <div id="page-wrapper">
-      <div id="submitter-background" onclick="hide_submitter(); event.stopPropagation();">
-        <div id="submitter" onclick="event.stopPropagation();">
-          <form id="submit-answer" method="post" action="/api/contests/{{contest.id}}/submissions">
-            <h2>Manda una risposta</h2>
-            <div>
-              <label for="question-team">
-                Squadra
-              </label>
-              <select name="team_id" id="question-team">
-                {% for team in contest.teams %}
-                  {% if not team.is_fake %}
-                    <option value="{{team.id}}">{{team.name}}</option>
-                  {% endif %}
-                {% endfor %}
-              </select>
-            </div>
-
-            <div>
-              <label for="question-question">
-                Quesito
-              </label>
-              <select name="question_id" id="question-question">
-                {% for question in contest.questions %}
-                  <option value="{{question.id}}">{{loop.index}}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div>
-              <label for="question-answer">
-                Risposta
-              </label>
-              <input name="answer" id="question-answer" type="number" required>
-            </div>
-
-            <div>
-              <label for="question-send" hidden>
-                Invia!
-              </label>
-              <input id="question-send" class="col-btn" type="submit" value="Invia!" required>
-            </div>
-          </form>
+{% extends "base" %}
+{% block head %}
+  <link rel="stylesheet" href="/styles/flipdown.css">
+  <link rel="stylesheet" href="/styles/ranking.css">
+  <script src="/scripts/flipdown.js"></script>
+  <script src="/scripts/ranking.js"></script>
+  <script src="/scripts/submitter.js"></script>
+  <title>{{contest.name}}</title>
+{% endblock %}
+{% block content %}
+  <div id="page-wrapper">
+    <div id="submitter-background" onclick="hide_submitter(); event.stopPropagation();">
+      <div id="submitter-wrapper" class="card" onclick="event.stopPropagation();">
+        {% include "submitter" %}
+        <a class="icon-button" id="submit-link" href="/submit/{{contest.id}}">
           <div>
+            <img
+              class="icon"
+              src="/icons/open.svg"
+              height="20"
+            >
           </div>
-          <form id="submit-jolly" method="post" action="/api/contests/{{contest.id}}/jollies">
-            <h2>Scegli il jolly</h2>
-            <div>
-              <label for="jolly-team">
-                Squadra
-              </label>
-              <select name="team_id" id="jolly-team">
-                {% for team in contest.teams %}
-                  {% if not team.is_fake %}
-                    <option value="{{team.id}}">{{team.name}}</option>
-                  {% endif %}
-                {% endfor %}
-              </select>
-            </div>
-
-            <div>
-              <label for="jolly-question">
-                Quesito
-              </label>
-              <select name="question_id" id="jolly-question">
-                {% for question in contest.questions %}
-                  <option value="{{question.id}}">{{loop.index}}</option>
-                {% endfor %}
-              </select>
-            </div>
-
-            <div class="filler"></div>
-
-            <div>
-              <label for="jolly-send" hidden>
-                Scegli il jolly!
-              </label>
-              <input class="col-btn" id="jolly-send" type="submit" value="Scegli il jolly!" required>
-            </div>
-          </form>
-        </div>
+          <div>Apri la pagina dedicata</div>
+        </a>
       </div>
-
-      <div id="page-intro">
-        <h1>
-          {{contest.name}}
-        </h1>
-
-        <div id="flipdown-wrapper">
-          <div id="flipdown" class="flipdown"></div>
-          <div id="clock-text"></div>
-        </div>
-
-        <div id="buttons">
-          <a class="header-button" href="https://www.phiquadro.it/gara_a_squadre/classifica_new.php?id_gara={{contest.phiquadro_id}}&id_sess={{contest.phiquadro_sess}}" target="_blank"><script style="display:none;">fullscreen=()=>{const d=new Date();if(d.getHours()==d.getMinutes()){window.location.href="https://www.youtube.com/watch?v=dQw4w9WgXcQ";}else{enter_fullscreen();};}</script>
-            <div>
-              <img
-                class="icon"
-                src="/icons/open.svg"
-                height="20"
-              >
-            </div>
-            <div>Vai alla gara su phiquadro</div>
-          </a>
-          <button id="toggle-visibility" class="header-button" onclick="hide_fake_teams()">
-            <div style="display:none;" id="show-teams-icon">
-              <img
-                class="icon"
-                src="/icons/eye_open.svg"
-                height="20"
-              >
-            </div>
-            <div id="hide-teams-icon">
-              <img
-                class="icon"
-                src="/icons/eye_closed.svg"
-                height="20"
-              >
-            </div>
-            <div id="toggle-visibility-text">Nascondi squadre fantasma</div>
-          </button>
-          <button class="header-button" onclick="show_submitter()">
-            <div>
-              <img
-                class="icon"
-                src="/icons/submit.svg"
-                height="20"
-              >
-            </div>
-            <div>Inserisci risposte</div>
-          </button>
-        </div>
-      </div>
-
-      <div id="fullscreen-buttons">
-        <div id="enter-fullscreen-btn" onclick="fullscreen();" title="Schermo intero">
-          <img
-            class="icon"
-            src="/icons/fullscreen.svg"
-            height="25"
-          >
-        </div>
-        <div id="exit-fullscreen-btn" onclick="exit_fullscreen();" style="display:none;" title="Esci da schermo intero">
-          <img
-            class="icon"
-            src="/icons/exit_fullscreen.svg"
-            height="25"
-          >
-        </div>
-      </div>
-
-      <table id="ranking">
-        <tr>
-          <th style="visibility: hidden"></th>
-          {% for question in contest.questions %}
-            <th class="question-header">
-              <div>
-                Q. {{loop.index}}
-              </div>
-              <div>
-                <span>{{question.score}}</span>
-                {% if question.locked %}
-                  <img
-                    class="icon"
-                    src="/icons/lock.svg"
-                    height="15"
-                  >
-                {% endif %}
-              </div>
-            </th>
-          {% endfor %}
-        </tr>
-        {% for team in contest.teams %}
-          {% if team.is_fake %}
-            <tr class="fake-team">
-          {% else %}
-            <tr class="real-team">
-          {% endif %}
-            <td class="team-header">
-              <div style="display: flex">
-                <div class="team-rank">
-                  {{loop.index}}
-                </div>
-                <div class="team-name">
-                  {{team.name}}
-                </div>
-              </div>
-              <div class="team-score">
-                {{team.score}}
-              </div>
-            </td>
-            {% for question in team.questions %}
-              {% if question.status == "Solved" %}
-                <td class="question question-solved">
-              {% elif question.status == "Attempted" %}
-                <td class="question question-attempted">
-              {% elif question.status == "JustSolved" %}
-                <td class="question question-just-solved">
-              {% else %}
-                <td class="question question-not-attempted">
-              {% endif %}
-                {{question.score}}
-              {% if question.jolly %}
-                <b>J</b>
-              {% endif %}
-              </td>
-            {% endfor %}
-          </tr>
-        {% endfor %}
-      </table>
     </div>
 
-    {% include "footer" %}
-  </body>
-</html>
+    <div id="page-intro">
+      <h1>
+        {{contest.name}}
+      </h1>
+
+      <div id="flipdown-wrapper">
+        <div id="flipdown" class="flipdown"></div>
+        <div id="clock-text"></div>
+      </div>
+
+      <div id="buttons">
+        <a class="icon-button" href="https://www.phiquadro.it/gara_a_squadre/classifica_new.php?id_gara={{contest.phiquadro_id}}&id_sess={{contest.phiquadro_sess}}" target="_blank">
+          <div>
+            <img
+              class="icon"
+              src="/icons/open.svg"
+              height="20"
+            >
+          </div>
+          <div>Vai alla gara su phiquadro</div>
+        </a>
+        <button id="toggle-visibility" class="icon-button" onclick="hide_fake_teams()">
+          <div style="display:none;" id="show-teams-icon">
+            <img
+              class="icon"
+              src="/icons/eye_open.svg"
+              height="20"
+            >
+          </div>
+          <div id="hide-teams-icon">
+            <img
+              class="icon"
+              src="/icons/eye_closed.svg"
+              height="20"
+            >
+          </div>
+          <div id="toggle-visibility-text">Nascondi squadre fantasma</div>
+        </button>
+        <button class="icon-button" onclick="show_submitter()">
+          <div>
+            <img
+              class="icon"
+              src="/icons/submit.svg"
+              height="20"
+            >
+          </div>
+          <div>Inserisci risposte</div>
+        </button>
+      </div>
+    </div>
+
+    <div id="fullscreen-buttons">
+      <div id="enter-fullscreen-btn" class="action-button" onclick="enter_fullscreen();" title="Schermo intero">
+        <img
+          class="icon"
+          src="/icons/fullscreen.svg"
+          height="25"
+        >
+      </div>
+      <div id="exit-fullscreen-btn" class="action-button" onclick="exit_fullscreen();" style="display:none;" title="Esci da schermo intero">
+        <img
+          class="icon"
+          src="/icons/exit_fullscreen.svg"
+          height="25"
+        >
+      </div>
+    </div>
+
+    <table id="ranking">
+      <tr>
+        <th style="visibility: hidden"></th>
+        {% for question in contest.questions %}
+          <th class="question-header">
+            <div>
+              Q. {{loop.index}}
+            </div>
+            <div>
+              <span>{{question.score}}</span>
+              {% if question.locked %}
+                <img
+                  class="icon"
+                  src="/icons/lock.svg"
+                  height="15"
+                >
+              {% endif %}
+            </div>
+          </th>
+        {% endfor %}
+      </tr>
+      {% for team in contest.teams %}
+        {% if team.is_fake %}
+          <tr class="fake-team">
+        {% else %}
+          <tr class="real-team">
+        {% endif %}
+          <td class="team-header">
+            <div style="display: flex">
+              <div class="team-rank">
+                {{loop.index}}
+              </div>
+              <div class="team-name">
+                {{team.name}}
+              </div>
+            </div>
+            <div class="team-score">
+              {{team.score}}
+            </div>
+          </td>
+          {% for question in team.questions %}
+            {% if question.status == "Solved" %}
+              <td class="question question-solved">
+            {% elif question.status == "Attempted" %}
+              <td class="question question-attempted">
+            {% elif question.status == "JustSolved" %}
+              <td class="question question-just-solved">
+            {% else %}
+              <td class="question question-not-attempted">
+            {% endif %}
+              {{question.score}}
+            {% if question.jolly %}
+              <b>J</b>
+            {% endif %}
+            </td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </table>
+  </div>
+{% endblock %}

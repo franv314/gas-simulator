@@ -2,8 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/styles/headerfooter.css">
     <link rel="stylesheet" href="/styles/privacy_policy.css">
+    <link rel="stylesheet" href="/styles/theme.css">
     <script src="/scripts/headerfooter.js"></script>
     <script src="/scripts/jsonform.js"></script>
     <script src="/scripts/privacy_policy.js"></script>
@@ -12,7 +14,7 @@
   <body>
     {% include "header" %}
 
-    <div id="page-content">
+    <div id="content" class="paragraph">
 
       <h1>Privacy policy</h1>
 

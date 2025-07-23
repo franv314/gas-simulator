@@ -52,14 +52,6 @@ function logout() {
     window.location.href = "/";
 }
 
-function redirect_to_create() {
-    window.location.href = "create";
-}
-
-function redirect_to_source() {
-    window.location.href = "https://github.com/franv314/gas-simulator";
-}
-
 function redirect_to_home() {
     window.location.href = "/";
 }

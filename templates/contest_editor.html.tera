@@ -1,0 +1,135 @@
+{% if contest %}
+  {% set editor_title = "Modifica la gara" %}
+  {% set form_action = "/api/contests/" ~ contest.id %}
+  {% set form_method = "PATCH" %}
+  {% set submit_text = "Aggiorna!" %}
+  {% set question_bonus = contest.question_bonus %}
+  {% set contest_bonus = contest.contest_bonus %}
+{% else %}
+  {% set editor_title = "Crea una gara" %}
+  {% set form_action = "/api/contests" %}
+  {% set form_method = "POST" %}
+  {% set submit_text = "Crea!" %}
+  {% set question_bonus = [20, 15, 10, 8, 6, 5, 4, 3, 2, 1] %}
+  {% set contest_bonus = [100, 60, 40, 30, 20, 10, 0, 0, 0, 0] %}
+{% endif %}
+
+<form id="contest-editor" class="full-width-card form" action="{{form_action}}" method="{{form_method}}">
+  <h1>{{editor_title}}</h1>
+  <div>
+    <label for="phiquadro_id">
+      ID della gara su PhiQuadro
+    </label>
+    {% if contest %}
+      <div class="fake-textbox"><span>{{contest.phiquadro_id}}</span></div>
+    {% else %}
+      <div><input name="phiquadro_id" id="phiquadro_id" type="number" required></div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="phiquadro_sess">
+      Sessione della gara su PhiQuadro
+    </label>
+    {% if contest %}
+        <div class="fake-textbox"><span>{{contest.phiquadro_sess}}</span></div>
+    {% else %}
+        <div><input name="phiquadro_sess" id="phiquadro_sess" type="number" value="1" required></div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="name">
+      Nome della simulazione
+    </label>
+    {% if contest %}
+      <div class="fake-textbox"><span>{{contest.name}}</span></div>
+    {% else %}
+      <div><input name="name" id="name" type="text" placeholder="se bianco, è il nome della gara"></div>
+    {% endif %}
+  </div>
+  <div>
+    <label for="start_time">
+    Orario di partenza
+    </label>
+    <div><input name="start_time" id="start_time" type="datetime-local" type="number"
+      {% if contest %}
+        value="{{contest.start_time | date(format="%Y-%m-%d %H:%M", timezone="Europe/Rome")}}"
+      {% endif %}
+      required></div>
+  </div>
+  <div>
+    <label for="duration">
+      Durata (minuti)
+    </label>
+    <div><input name="duration" id="duration" type="number"
+      {% if contest %}
+        value="{{(contest.duration[0] - contest.duration[0] % 60) / 60}}"
+      {% endif %}
+      required></div>
+  </div>
+    <div>
+    <label for="drift">
+      Deriva
+    </label>
+    <div><input name="drift" id="drift" type="number"
+      {% if contest %}
+        value="{{contest.drift}}"
+      {% else %}
+        value="3"
+      {% endif %}
+      required></div>
+  </div>
+  <div>
+    <label for="drift_time">
+      Durata deriva (minuti)
+    </label>
+    <div><input name="drift_time" id="drift_time"  type="number"
+      {% if contest %}
+        value="{{(contest.drift_time[0] - contest.drift_time[0] % 60) / 60}}"
+      {% endif %}
+      required></div>
+  </div>
+  <div>
+    <label for="jolly_time">
+      Durata scelta jolly (minuti)
+    </label>
+    <div><input name="jolly_time" id="jolly_time"  type="number"
+      {% if contest %}
+        value="{{(contest.jolly_time[0] - contest.jolly_time[0] % 60) / 60}}"
+      {% else %}
+        value="10"
+      {% endif %}
+      required></div>
+  </div>
+  <div>
+    <div>
+      Bonus prima risposta
+    </div>
+    <div class="quintuple-input">
+      {% for num in ["prima", "seconda", "terza", "quarta", "quinta", "sesta", "settima", "ottava", "nona", "decima"] %}
+        <label for="question_bonus_{{loop.index}}" hidden>Bonus {{num}} soluzione</label>
+      {% endfor %}
+      {% for val in question_bonus %}
+        <input name="question_bonus_{{loop.index}}" id="question_bonus_{{loop.index}}" type="number" value="{{val}}" required>
+      {% endfor %}
+    </div>
+  </div>
+  <div>
+    <div>
+      Bonus primo full
+    </div>
+    <div class="quintuple-input">
+      {% for num in ["primo", "secondo", "terzo", "quarto", "quinto", "sesto", "settimo", "ottavo", "nono", "decimo"] %}
+        <label for="contest_bonus_{{loop.index}}" hidden>Bonus {{num}} full</label>
+      {% endfor %}
+      {% for val in contest_bonus %}
+        <input name="contest_bonus_{{loop.index}}" id="contest_bonus_{{loop.index}}" type="number" value="{{val}}" required>
+      {% endfor %}
+    </div>
+  </div>
+  <div class="submit-buttons">
+    <label id="submit-label" for="submit" hidden>
+      {{submit_text}}
+    </label>
+    <input id="submit" class="submit-button" type="submit" value="{{submit_text}}">
+  </div>
+</form>

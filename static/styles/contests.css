@@ -1,30 +1,5 @@
-* {
-    padding: 0;
-    margin: 0;
-    border: 0;
-    font-family: var(--font-family);
-}
-
-#page-content {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    flex: auto;
-}
-
 #add-button {
-    font-size: 16px;
-    margin-top: 35px;
-    padding: 8px 18px;
-    background-color: var(--theme-color);
-}
-
-#add-button:hover {
-    background-color: var(--theme-color-dark);
-}
-
-#add-button .icon {
-    vertical-align: middle;
+    margin: 35px auto 0 auto;
 }
 
 #contest-list {
@@ -42,11 +17,7 @@
     padding: 0px 10px;
     margin: 15px 0px;
     box-shadow: 0 3px 10px rgba(128, 128, 128, 0.2);
-}
-
-#contest-list li:hover {
-    background-color: #f4f4f4;
-    box-shadow: 0 3px 10px rgba(128, 128, 128, 0.4);
+    user-select: none;
 }
 
 #contest-list li > div {
@@ -78,24 +49,27 @@
 }
 
 .contest-actions > div {
-    padding: 4px 3px;
     margin: 0px 1px;
-    border-radius: 3px;
-    width: fit-content;
-    height: fit-content;
-    display: flex;
 }
 
-.contest-actions > div:hover {
-    background-color: #d0d0d0;
+@media screen and (max-width: 600px) {
+    #contest-list li {
+        display: block;
+        height: fit-content;
+        padding: 6px 10px;
+    }
+    #contest-list li > div {
+        flex: 100%;
+        justify-content: center;
+        text-align: center;
+        padding: 2px 0;
+    }
 }
 
-#welcome {
-    width: min(1000px, 95%);
-    margin: 30px auto;
-}
-
-#welcome > h1 {
-    font-size: 24px;
-    margin-bottom: 10px;
+@media (hover: hover) {
+    #contest-list li:hover {
+        background-color: #f4f4f4;
+        box-shadow: 0 3px 10px rgba(128, 128, 128, 0.4);
+        cursor: default;
+    }
 }

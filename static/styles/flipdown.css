@@ -35,16 +35,21 @@
 
 /* END OF THEMES */
 
+:root {
+    --flipdown-scaling: 0.8;
+}
+
 .flipdown {
     overflow: visible;
     width: fit-content;
-    height: 110px;
+    height: calc(110px * var(--flipdown-scaling));
+    user-select: none;
 }
 
 .flipdown .rotor-group {
     position: relative;
     float: left;
-    padding-right: 30px;
+    padding-right: calc(30px * var(--flipdown-scaling));
 }
 .no-display-days > div:first-child {
     display: none;
@@ -56,8 +61,8 @@
 
 .flipdown .rotor-group-heading:before {
     display: block;
-    height: 30px;
-    line-height: 30px;
+    height: calc(30px * var(--flipdown-scaling));
+    line-height: calc(30px * var(--flipdown-scaling));
     text-align: center;
 }
 
@@ -80,31 +85,31 @@
 .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
     content: '';
     position: absolute;
-    bottom: 20px;
-    left: 115px;
-    width: 10px;
-    height: 10px;
+    bottom: calc(20px * var(--flipdown-scaling));
+    left: calc(115px * var(--flipdown-scaling));
+    width: calc(10px * var(--flipdown-scaling));
+    height: calc(10px * var(--flipdown-scaling));
     border-radius: 50%;
 }
 
 .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
     content: '';
     position: absolute;
-    bottom: 50px;
-    left: 115px;
-    width: 10px;
-    height: 10px;
+    bottom: calc(50px * var(--flipdown-scaling));
+    left: calc(115px * var(--flipdown-scaling));
+    width: calc(10px * var(--flipdown-scaling));
+    height: calc(10px * var(--flipdown-scaling));
     border-radius: 50%;
 }
 
 .flipdown .rotor {
     position: relative;
     float: left;
-    width: 50px;
-    height: 80px;
-    margin: 0px 5px 0px 0px;
-    border-radius: 8px;
-    font-size: 4rem;
+    width: calc(50px * var(--flipdown-scaling));
+    height: calc(80px * var(--flipdown-scaling));
+    margin: 0px calc(5px * var(--flipdown-scaling)) 0px 0px;
+    border-radius: calc(8px * var(--flipdown-scaling));;
+    font-size: calc(4rem * var(--flipdown-scaling));
     text-align: center;
     perspective: 200px;
 }
@@ -117,15 +122,15 @@
 .flipdown .rotor-bottom {
     overflow: hidden;
     position: absolute;
-    width: 50px;
-    height: 40px;
+    width: calc(50px * var(--flipdown-scaling));
+    height: calc(40px * var(--flipdown-scaling));
 }
 
 .flipdown .rotor-leaf {
     z-index: 1;
     position: absolute;
-    width: 50px;
-    height: 80px;
+    width: calc(50px * var(--flipdown-scaling));
+    height: calc(80px * var(--flipdown-scaling));
     transform-style: preserve-3d;
     transition: transform 0s;
 }
@@ -139,8 +144,8 @@
 .flipdown .rotor-leaf-rear {
     overflow: hidden;
     position: absolute;
-    width: 50px;
-    height: 40px;
+    width: calc(50px * var(--flipdown-scaling));
+    height: calc(40px * var(--flipdown-scaling));
     margin: 0;
     transform: rotateX(0deg);
     backface-visibility: hidden;
@@ -148,25 +153,25 @@
 }
 
 .flipdown .rotor-leaf-front {
-    line-height: 80px;
-    border-radius: 8px 8px 0px 0px;
+    line-height: calc(80px * var(--flipdown-scaling));
+    border-radius: calc(8px * var(--flipdown-scaling)) calc(8px * var(--flipdown-scaling)) 0px 0px;
 }
 
 .flipdown .rotor-leaf-rear {
     line-height: 0px;
-    border-radius: 0px 0px 8px 8px;
+    border-radius: 0px 0px calc(8px * var(--flipdown-scaling)) calc(8px * var(--flipdown-scaling));
     transform: rotateX(-180deg);
 }
 
 .flipdown .rotor-top {
-    line-height: 80px;
-    border-radius: 8px 8px 0px 0px;
+    line-height: calc(80px * var(--flipdown-scaling));
+    border-radius: calc(8px * var(--flipdown-scaling)) calc(8px * var(--flipdown-scaling)) 0px 0px;
 }
 
 .flipdown .rotor-bottom {
     bottom: 0;
     line-height: 0px;
-    border-radius: 0px 0px 8px 8px;
+    border-radius: 0px 0px calc(8px * var(--flipdown-scaling)) calc(8px * var(--flipdown-scaling));
 }
 
 .flipdown .rotor:after {
@@ -175,78 +180,13 @@
     position: absolute;
     bottom: 0px;
     left: 0px;
-    width: 50px;
-    height: 40px;
-    border-radius: 0px 0px 4px 4px;
+    width: calc(50px * var(--flipdown-scaling));
+    height: calc(40px * var(--flipdown-scaling));
+    border-radius: 0px 0px calc(8px * var(--flipdown-scaling)) calc(8px * var(--flipdown-scaling));
 }
 
-@media (max-width: 550px) {
-    .flipdown {
-        width: 312px;
-        height: 70px;
-    }
-
-    .flipdown .rotor {
-        font-size: 2.2rem;
-        margin-right: 3px;
-    }
-
-    .flipdown .rotor,
-    .flipdown .rotor-leaf,
-    .flipdown .rotor-leaf-front,
-    .flipdown .rotor-leaf-rear,
-    .flipdown .rotor-top,
-    .flipdown .rotor-bottom,
-    .flipdown .rotor:after {
-        width: 30px;
-    }
-
-    .flipdown .rotor-group {
-        padding-right: 20px;
-    }
-
-    .flipdown .rotor-group:last-child {
-        padding-right: 0px;
-    }
-
-    .flipdown .rotor-group-heading:before {
-        font-size: 0.8rem;
-        height: 20px;
-        line-height: 20px;
-    }
-
-    .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before,
-    .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
-        left: 69px;
-    }
-
-    .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):before {
-        bottom: 13px;
-        height: 8px;
-        width: 8px;
-    }
-
-    .flipdown .rotor-group:nth-child(n+2):nth-child(-n+3):after {
-        bottom: 29px;
-        height: 8px;
-        width: 8px;
-    }
-
-    .flipdown .rotor-leaf-front,
-    .flipdown .rotor-top {
-        line-height: 50px;
-    }
-
-    .flipdown .rotor-leaf,
-    .flipdown .rotor {
-        height: 50px;
-    }
-
-    .flipdown .rotor-leaf-front,
-    .flipdown .rotor-leaf-rear,
-    .flipdown .rotor-top,
-    .flipdown .rotor-bottom,
-    .flipdown .rotor:after {
-        height: 25px;
+@media screen and (max-width: 600px) {
+    :root {
+        --flipdown-scaling: 0.65;
     }
 }

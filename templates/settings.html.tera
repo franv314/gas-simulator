@@ -1,190 +1,61 @@
-<!DOCTYPE html>
-<html lang="it">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/styles/settings.css">
-    <script src="/scripts/jsonform.js"></script>
-    <script src="/scripts/headerfooter.js"></script>
-    <script src="/scripts/settings.js"></script>
-    <title>Impostazioni: {{contest.name}}</title>
-  </head>
-  <body>
-    {% include "header" %}
+{% extends "base" %}
+{% block head %}
+  <link rel="stylesheet" href="/styles/settings.css">
+  <script src="/scripts/settings.js"></script>
+  <title>Impostazioni: {{contest.name}}</title>
+{% endblock %}
+{% block content %}
+  <div class="page-content">
+    {% include "contest_editor" %}
 
-    <div id="page-content">
-      <form id="update" class="settings-group" method="PATCH" action="/api/contests/{{contest.id}}">
-        <h1>
-          Modifica la gara
-        </h1>
+    <div id="teams" class="full-width-card settings-group" class="settings-group">
+      <h1>
+        Aggiungi squadre
+      </h1>
 
-        <div>
-          <div class="fake-label">
-            ID della gara su PhiQuadro
-          </div>
-          <div class="fake-input fake-textbox">
-            <span>{{contest.phiquadro_id}}</span>
-          </div>
-        </div>
-        <div>
-          <div class="fake-label">
-            Sessione della gara su PhiQuadro
-          </div>
-          <div class="fake-input fake-textbox">
-            <span>{{contest.phiquadro_sess}}</span>
-          </div>
-        </div>
-        <div>
-          <div class="fake-label">
-            Nome della simulazione
-          </div>
-          <div class="fake-input fake-textbox">
-            <span>{{contest.name}}</span>
-          </div>
-        </div>
-        <div>
-          <label for="start_time">
-            Orario di partenza
-          </label>
-          <div><input name="start_time" id="start_time" type="datetime-local" value="{{contest.start_time | date(format="%Y-%m-%d %H:%M", timezone="Europe/Rome")}}" required></div>
-        </div>
-        <div>
-          <label for="duration">
-            Durata (minuti)
-          </label>
-          <div><input name="duration" id="duration" value="{{(contest.duration[0] - contest.duration[0] % 60) / 60}}" type="number" required></div>
-        </div>
-        <div>
-          <label for="drift">
-            Deriva
-          </label>
-          <div><input name="drift" id="drift" type="number" value="{{contest.drift}}" required></div>
-        </div>
-        <div>
-          <label for="drift_time">
-            Durata deriva (minuti)
-          </label>
-          <div><input name="drift_time" id="drift_time" value="{{(contest.drift_time[0] - contest.drift_time[0] % 60) / 60}}" type="number" required></div>
-        </div>
-        <div>
-          <label for="jolly_time">
-            Durata scelta jolly (minuti)
-          </label>
-          <div><input name="jolly_time" id="jolly_time" value="{{(contest.jolly_time[0] - contest.jolly_time[0] % 60) / 60}}" type="number" required></div>
-        </div>
-        <div>
-          <div class="fake-label">
-            Bonus prima risposta
-          </div>
-          <div class="fake-input">
-            <label for="question_bonus_1" hidden>Bonus prima soluzione</label>
-            <label for="question_bonus_2" hidden>Bonus seconda soluzione</label>
-            <label for="question_bonus_3" hidden>Bonus terza soluzione</label>
-            <label for="question_bonus_4" hidden>Bonus quarta soluzione</label>
-            <label for="question_bonus_5" hidden>Bonus quinta soluzione</label>
-            <label for="question_bonus_6" hidden>Bonus sesta soluzione</label>
-            <label for="question_bonus_7" hidden>Bonus settima soluzione</label>
-            <label for="question_bonus_8" hidden>Bonus ottava soluzione</label>
-            <label for="question_bonus_9" hidden>Bonus nona soluzione</label>
-            <label for="question_bonus_10" hidden>Bonus decima soluzione</label>
-            <input name="question_bonus_1" id="question_bonus_1" type="number" value="{{contest.question_bonus[0]}}" required>
-            <input name="question_bonus_2" id="question_bonus_2" type="number" value="{{contest.question_bonus[1]}}" required>
-            <input name="question_bonus_3" id="question_bonus_3" type="number" value="{{contest.question_bonus[2]}}" required>
-            <input name="question_bonus_4" id="question_bonus_4" type="number" value="{{contest.question_bonus[3]}}" required>
-            <input name="question_bonus_5" id="question_bonus_5" type="number" value="{{contest.question_bonus[4]}}" required>
-            <input name="question_bonus_6" id="question_bonus_6" type="number" value="{{contest.question_bonus[5]}}" required>
-            <input name="question_bonus_7" id="question_bonus_7" type="number" value="{{contest.question_bonus[6]}}" required>
-            <input name="question_bonus_8" id="question_bonus_8" type="number" value="{{contest.question_bonus[7]}}" required>
-            <input name="question_bonus_9" id="question_bonus_9" type="number" value="{{contest.question_bonus[8]}}" required>
-            <input name="question_bonus_10" id="question_bonus_10" type="number" value="{{contest.question_bonus[9]}}" required>
-          </div>
-        </div>
-        <div>
-          <div class="fake-label">
-            Bonus primo full
-          </div>
-          <div class="fake-input">
-            <label for="contest_bonus_1" hidden>Bonus primo full</label>
-            <label for="contest_bonus_2" hidden>Bonus secondo full</label>
-            <label for="contest_bonus_3" hidden>Bonus terzo full</label>
-            <label for="contest_bonus_4" hidden>Bonus quarto full</label>
-            <label for="contest_bonus_5" hidden>Bonus quinto full</label>
-            <label for="contest_bonus_6" hidden>Bonus sesto full</label>
-            <label for="contest_bonus_7" hidden>Bonus settimo full</label>
-            <label for="contest_bonus_8" hidden>Bonus ottavo full</label>
-            <label for="contest_bonus_9" hidden>Bonus nono full</label>
-            <label for="contest_bonus_10" hidden>Bonus decimo full</label>
-            <input name="contest_bonus_1" id="contest_bonus_1" type="number" value="{{contest.contest_bonus[0]}}" required>
-            <input name="contest_bonus_2" id="contest_bonus_2" type="number" value="{{contest.contest_bonus[1]}}" required>
-            <input name="contest_bonus_3" id="contest_bonus_3" type="number" value="{{contest.contest_bonus[2]}}" required>
-            <input name="contest_bonus_4" id="contest_bonus_4" type="number" value="{{contest.contest_bonus[3]}}" required>
-            <input name="contest_bonus_5" id="contest_bonus_5" type="number" value="{{contest.contest_bonus[4]}}" required>
-            <input name="contest_bonus_6" id="contest_bonus_6" type="number" value="{{contest.contest_bonus[5]}}" required>
-            <input name="contest_bonus_7" id="contest_bonus_7" type="number" value="{{contest.contest_bonus[6]}}" required>
-            <input name="contest_bonus_8" id="contest_bonus_8" type="number" value="{{contest.contest_bonus[7]}}" required>
-            <input name="contest_bonus_9" id="contest_bonus_9" type="number" value="{{contest.contest_bonus[8]}}" required>
-            <input name="contest_bonus_10" id="contest_bonus_10" type="number" value="{{contest.contest_bonus[9]}}" required>
-          </div>
-        </div>
-        <div id="submit-wrapper">
-          <label id="submit-label" for="submit" hidden>
-            Aggiorna!
-          </label>
-          <input id="submit" class="col-btn" type="submit" value="Aggiorna!">
-        </div>
-      </form>
-
-      <div id="teams" class="settings-group">
-        <h1>
-          Aggiungi squadre
-        </h1>
-
-        {% for team in contest.teams %}
-          {% if team.is_fake %}
-          {% else %}
-            <div>
-              <div class="team-name">
-                {{team.name}}
-              </div>
-              <div class="action-icon" onclick="delete_team({{contest.id}}, {{team.id}});">
-                <img
-                  class="icon"
-                  src="/icons/bin.svg"
-                  height="20"
-                >
-              </div>
+      {% for team in contest.teams %}
+        {% if not team.is_fake %}
+          <div>
+            <div class="team-name">
+              {{team.name}}
             </div>
-          {% endif %}
-        {% endfor %}
-
-        <div>
-          <form id="add-team" class="team-name" method="post" action="/api/contests/{{contest.id}}/teams" onsubmit="event.preventDefault(); send_form(document.getElementById('add-team'), conv_add_team, reload_callback);">
-            <label for="team_name" hidden>
-              Nome della squadra
-            </label>
-            <input name="team_name" id="team_name" placeholder="Nome della squadra" required>
-          </form>
-          <div id="add-team-button" class="action-icon" onclick="send_form(document.getElementById('add-team'), conv_add_team, reload_callback)">
-            <img
-              class="icon"
-              src="/icons/add.svg"
-              height="20"
-            >
+            <div class="action-icon action-button" onclick="delete_team({{contest.id}}, {{team.id}});">
+              <img
+                class="icon"
+                src="/icons/bin.svg"
+                height="20"
+              >
+            </div>
           </div>
-        </div>
-      </div>
+        {% endif %}
+      {% endfor %}
 
-      <button id="to-contest-button" class="header-button" onclick="redirect_to_contest({{contest.id}});">
-        <div>
+      <div>
+        <form id="add-team" class="team-name" method="post" action="/api/contests/{{contest.id}}/teams" onsubmit="event.preventDefault(); send_form(document.getElementById('add-team'), conv_add_team, reload_callback);">
+          <label for="team_name" hidden>
+            Nome della squadra
+          </label>
+          <input name="team_name" id="team_name" class="textbox" placeholder="Nome della squadra" required>
+        </form>
+        <div id="add-team-button" class="action-icon action-button" onclick="send_form(document.getElementById('add-team'), conv_add_team, reload_callback)">
           <img
             class="icon"
-            src="/icons/open.svg"
+            src="/icons/add.svg"
             height="20"
           >
         </div>
-        <div>Vai alla gara</div>
-      </button>
+      </div>
     </div>
 
-    {% include "footer" %}
-  </body>
-</html>
+    <a id="to-contest-button" class="link-button" href="/contest/{{contest.id}}">
+      <div>
+        <img
+          class="icon"
+          src="/icons/open.svg"
+          height="20"
+        >
+      </div>
+      <div>Vai alla gara</div>
+    </a>
+  </div>
+{% endblock %}

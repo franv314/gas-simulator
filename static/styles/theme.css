@@ -1,0 +1,277 @@
+:root {
+    --theme-color: rgb(167, 219, 233);
+    --theme-color-dark: rgb(152, 203, 218);
+    --body-background: #eeeeee;
+    --box-shadow: 0 3px 10px rgba(128, 128, 128, 0.5);
+    --font-family: Arial, Helvetica, sans-serif;
+}
+
+/******************************* Page structure *******************************/
+
+* {
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-family: var(--font-family);
+}
+
+body {
+    min-height: 100vh;
+    min-width: 100%;
+    background-color: var(--body-background);
+    display: flex;
+    flex-direction: column;
+}
+
+.page-content {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    flex: auto;
+    width: 100%;
+    padding-bottom: 30px;
+}
+
+h1 {
+    font-size: 26px;
+}
+
+/********************************** Buttons ***********************************/
+
+.blue-button,
+.icon-button,
+.submit-button,
+.header-button,
+.action-button,
+.link-button {
+    border: none;
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+    border-radius: 5px;
+    cursor: default;
+    text-decoration: none;
+    color: inherit;
+    user-select: none;
+}
+
+.blue-button,
+.icon-button,
+.submit-button,
+.link-button {
+    background-color: var(--theme-color);
+}
+
+.blue-button {
+    padding: 2px 5px;
+}
+
+.icon-button {
+    font-size: 14px;
+}
+
+.header-button,
+.icon-button,
+.link-button {
+    display: flex;
+    padding: 5px 8px;
+}
+
+.submit-button {
+    font-size: large;
+    padding: 5px 15px;
+}
+
+.link-button {
+    font-size: 16px;
+    padding: 8px 18px;
+    margin: 15px auto;
+}
+
+.action-button {
+    padding: 4px;
+    border-radius: 3px;
+    display: flex;
+}
+
+.header-button > *,
+.icon-button > *,
+.link-button > * {
+    vertical-align: middle;
+    margin: auto 2px;
+    display: flex;
+    height: fit-content;
+}
+
+@media (hover: hover) {
+    .blue-button:hover,
+    .icon-button:hover,
+    .submit-button:hover,
+    .link-button:hover {
+        background-color: var(--theme-color-dark);
+    }
+    .header-button:hover {
+        background-color: #e9e9e9;
+    }
+    .action-button:hover {
+        background-color: #d0d0d0;
+    }
+}
+
+/****************************** Cards and forms *******************************/
+
+.card,
+.full-width-card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+.full-width-card {
+    width: min(600px, calc(100vw - 60px));
+    padding: 15px;
+    margin: 20px auto;
+}
+
+.full-width-card:first-child {
+    margin-top: 40px;
+}
+
+.form > h1 {
+    text-align: center;
+    margin-bottom: 15px;
+    font-size: 26px;
+}
+
+.form > div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 5px 0;
+}
+
+.form > div:not(.submit-buttons) > * {
+    flex: 45%;
+    margin: auto 5px;
+}
+
+.form > div:not(.submit-buttons) > *:first-child {
+    text-align: right;
+}
+
+.form > div > div:not(.quintuple-input) > input,
+.form > div > div:not(.quintuple-input) > select {
+    width: 100%;
+}
+
+.form input[type="text"],
+.form input[type="number"],
+.form input[type="datetime-local"],
+.form input[type="password"],
+.form select,
+.textbox {
+    border-radius: 3px;
+    padding: 0px 5px;
+    border: 1px solid black;
+    height: 25px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+.form input[type="number"] {
+    appearance: none;
+    -moz-appearance: textfield;
+}
+
+select {
+    background-color: white;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("/icons/dropdown.svg");
+    background-size: 15px;
+    background-repeat: no-repeat;
+    background-position: calc(100% - 5px) center;
+}
+
+.form .quintuple-input {
+    display: flex;
+    flex-direction: row;
+    flex-flow: row wrap;
+}
+
+.quintuple-input > input[type="number"] {
+    height: 20px;
+    width: calc((100% - 24px) / 5);
+    margin-top: 1px;
+    margin-bottom: 1px;
+}
+
+.quintuple-input > input:not(:nth-child(5n + 1)) {
+    margin-left: 3px;
+}
+
+.quintuple-input > input:not(:nth-child(5n)) {
+    margin-right: 3px;
+}
+
+.fake-textbox {
+    height: 25px;
+    border: 1px solid transparent;
+    display: flex;
+}
+
+.fake-textbox > span {
+    margin: auto 0;
+}
+
+.submit-buttons {
+    margin-top: 15px !important;
+    display: flex;
+    flex-direction: row;
+}
+
+.submit-buttons > * {
+    margin: 0 5px;
+    flex: 1;
+}
+
+@media screen and (max-width: 600px) {
+    .form > div:not(.submit-buttons) > *:first-child {
+        flex: 30%;
+    }
+    .form > div:not(.submit-buttons) > *:nth-child(2) {
+        flex: 60%;
+    }
+}
+
+/********************************* Paragraph **********************************/
+
+.paragraph {
+    width: min(1000px, 100% - 30px);
+    margin: 25px auto 40px auto;
+    line-height: 1.5em;
+}
+
+.paragraph h1 {
+    margin-bottom: 10px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.paragraph h2 {
+    margin-top: 18px;
+    margin-bottom: 5px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.paragraph a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+.paragraph ul {
+    list-style-position: inside;
+}

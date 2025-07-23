@@ -1,0 +1,47 @@
+<form id="submitter" class="form" action="/api/contests/{{contest.id}}/submissions" method="post">
+  <h1>Inserisci risposte</h1>
+  <div>
+    <label for="team-input">
+      Squadra
+    </label>
+    <div>
+    <select name="team_id" id="team-input">
+      {% for team in contest.teams %}
+        {% if not team.is_fake %}
+          <option value="{{team.id}}">{{team.name}}</option>
+        {% endif %}
+      {% endfor %}
+    </select>
+    </div>
+  </div>
+  <div>
+    <label for="question-input">
+      Quesito
+    </label>
+    <div>
+    <select name="question_id" id="question-input">
+      {% for question in contest.questions %}
+      <option value="{{question.id}}">{{loop.index}}</option>
+      {% endfor %}
+    </select>
+    </div>
+  </div>
+  <div>
+    <label for="answer-input">
+      Risposta
+    </label>
+    <div>
+      <input name="answer" id="answer-input" type="number" required>
+    </div>
+  </div>
+  <div class="submit-buttons">
+    <label for="submit-answer" hidden>
+      Inserisci risposta
+    </label>
+    <input id="submit-answer" class="submit-button" type="submit" value="Inserisci risposta">
+
+    <button id="submit-jolly" class="submit-button" onclick="event.preventDefault(); submit_jolly({{contest.id}});">
+      Scegli come jolly
+    </button>
+  </div>
+</form>

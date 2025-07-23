@@ -6,7 +6,7 @@ window.onload = () => {
     load_header();
 
     setup_form(
-        "create",
+        "contest-editor",
         (data) => {
             return {
                 "phiquadro_id": parseInt(data.get("phiquadro_id")),

@@ -1,30 +1,3 @@
-:root {
-    --theme-color: rgb(167, 219, 233);
-    --theme-color-dark: rgb(152, 203, 218);
-    --body-background: #eeeeee;
-    --box-shadow: 0 3px 10px rgba(128, 128, 128, 0.5);
-    --font-family: Arial, Helvetica, sans-serif;
-}
-
-body {
-    min-height: 100vh;
-    min-width: 100%;
-    background-color: var(--body-background);
-    display: flex;
-    flex-direction: column;
-}
-
-.col-btn {
-    background-color: var(--theme-color);
-    border: none;
-    padding: 5px 15px 5px 15px;
-    border-radius: 5px;
-}
-
-.col-btn:hover {
-    background-color: var(--theme-color-dark);
-}
-
 header {
     position: relative;
     z-index: 10;
@@ -33,7 +6,6 @@ header {
     width: 100%;
     display: flex;
     justify-content: center;
-    font-family: var(--font-family);
     box-shadow: var(--box-shadow);
 }
 
@@ -45,26 +17,8 @@ header {
     justify-content: space-between;
 }
 
-.header-button {
-    display: flex;
-    border-radius: 5px;
-    padding: 3px 5px;
-}
-
-.header-button > * {
-    vertical-align: middle;
-    margin: auto 2px;
-    display: flex;
-    height: fit-content;
-}
-
 header img {
     transform: translateY(-2px);
-}
-
-.header-button:hover {
-    cursor: default;
-    background-color: #e9e9e9;
 }
 
 #auth-background {
@@ -79,11 +33,8 @@ header img {
     position: absolute;
     top: 55px;
     visibility: hidden;
-    background-color: white;
     z-index: 100;
     padding: 15px 20px;
-    box-shadow: var(--box-shadow);
-    border-radius: 10px;
 }
 
 #auth-form {
@@ -129,23 +80,14 @@ header img {
     margin-bottom: 8px;
 }
 
-.auth-switch-tab > .col-btn {
-    margin-left: 5px;
-    padding: 3px 10px;
-    font-size: 12px;
-}
-
-#auth-form input:not([type=submit], [type=checkbox]) {
-    border: 1px solid black;
-    border-radius: 5px;
-    height: 25px;
-    padding: 0px 5px;
+#auth-form .textbox {
     width: 175px;
     margin-left: 8px;
 }
 
 #logout-button, #auth-background input[type=submit] {
     width: 100%;
+    font-size: 16px;
 }
 
 footer {

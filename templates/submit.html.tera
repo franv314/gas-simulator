@@ -1,0 +1,28 @@
+{% extends "base" %}
+{% block head %}
+    <link rel="stylesheet" href="/styles/submit.css">
+    <link rel="stylesheet" href="/styles/submitter.css">
+    <script src="/scripts/submitter.js"></script>
+    <script src="/scripts/submit.js"></script>
+    <title>
+      Inserisci risposte: {{contest.name}}
+    </title>
+{% endblock %}
+{% block content %}
+  <div class="page-content">
+    <div id="submitter-wrapper" class="full-width-card">
+      {% include "submitter" %}
+    </div>
+
+    <a id="ranking-link" class="link-button" href="/contest/{{contest.id}}">
+      <div>
+        <img
+          class="icon"
+          src="/icons/open.svg"
+          height="20"
+        >
+      </div>
+      <div>Vai alla classifica</div>
+    </a>
+  </div>
+{% endblock %}

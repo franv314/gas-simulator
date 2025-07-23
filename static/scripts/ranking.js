@@ -1,54 +1,6 @@
 window.onload = () => {
     load_header();
-
-    setup_form(
-        "submit-answer",
-        (data) => {
-            return {
-                "team_id": parseInt(data.get("team_id")),
-                "question_id": parseInt(data.get("question_id")),
-                "answer": parseInt(data.get("answer")),
-            };
-        },
-        (response) => {
-            if (response.status == 201) {
-                response.json().then(body => {
-                    if (body.correct) {
-                        alert("Risposta esatta!");
-                    } else {
-                        alert("Risposta errata!");
-                    }
-                    reload_content();
-                    hide_submitter();
-                });
-            } else {
-                response.json().then(body => {
-                    alert(body.error)
-                });
-            }
-        },
-    );
-
-    setup_form(
-        "submit-jolly",
-        (data) => {
-            return {
-                "team_id": parseInt(data.get("team_id")),
-                "question_id": parseInt(data.get("question_id")),
-            };
-        },
-        (response) => {
-            if (response.status == 201) {
-                alert("Jolly scelto!");
-                reload_content();
-                hide_submitter();
-            } else {
-                response.json().then(body => {
-                    alert(body.error)
-                });
-            }
-        },
-    );
+    setup_submitter();
 
     document.addEventListener('fullscreenchange', exit_fullscreen_adjust, false);
 
@@ -120,13 +72,13 @@ function show_fake_teams() {
 
 function show_submitter() {
     document.getElementById("submitter-background").style.visibility = "visible";
-    document.getElementById("submitter").style.visibility = "visible";
+    document.getElementById("submitter-wrapper").style.visibility = "visible";
     document.body.style.overflow = "hidden";
 }
 
 function hide_submitter() {
     document.getElementById("submitter-background").style.visibility = "hidden";
-    document.getElementById("submitter").style.visibility = "hidden";
+    document.getElementById("submitter-wrapper").style.visibility = "hidden";
     document.body.style.overflow = "auto";
 }
 

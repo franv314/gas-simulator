@@ -1,25 +1,19 @@
-<!DOCTYPE html>
-<html lang="it">
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="/styles/contests.css">
-    <link rel="stylesheet" href="/styles/headerfooter.css">
-    <script src="/scripts/headerfooter.js"></script>
-    <script src="/scripts/contests.js"></script>
-    <title>
-      {% if user %}
-        Gare
-      {% else %}
-        Simulatore GaS
-      {% endif %}
-    </title>
-  </head>
-  <body>
-    {% include "header" %}
-
-    <div id="page-content">
-      {% if user %}
-      <button id="add-button" class="header-button" onclick="redirect_to_create()">
+{% extends "base" %}
+{% block head %}
+  <link rel="stylesheet" href="/styles/contests.css">
+  <script src="/scripts/contests.js"></script>
+  <title>
+    {% if user %}
+      Gare
+    {% else %}
+      Simulatore GaS
+    {% endif %}
+  </title>
+{% endblock %}
+{% block content %}
+  <div class="page-content">
+    {% if user %}
+      <a id="add-button" class="link-button" href="/create">
         <div>
           <img
             class="icon"
@@ -28,7 +22,7 @@
           >
         </div>
         <div>Crea una gara</div>
-      </button>
+      </a>
 
       <ul id="contest-list">
         {% for contest in contests %}
@@ -74,6 +68,7 @@
             </div>
             <div class="contest-actions">
               <div
+                class="action-button"
                 onclick="copy_contest_link({{contest.id}}); event.stopPropagation();"
                 title="Copia link"
               >
@@ -84,6 +79,7 @@
                 >
               </div>
               <div
+                class="action-button"
                 onclick="redirect_to_settings({{contest.id}}); event.stopPropagation();"
                 title="Impostazioni"
               >
@@ -94,6 +90,7 @@
                 >
               </div>
               <div
+                class="action-button"
                 onclick="delete_contest({{contest.id}}); event.stopPropagation();"
                 title="Elimina"
               >
@@ -107,15 +104,12 @@
           </li>
         {% endfor %}
       </ul>
-      {% else %}
-      <div id="welcome">
+    {% else %}
+      <div id="welcome" class="paragraph">
         <h1>Simulatore GaS</h1>
 
         <p>Benvenuto! Per iniziare accedi o crea un account.</p>
       </div>
-      {% endif %}
-    </div>
-
-    {% include "footer" %}
-  </body>
-</html>
+    {% endif %}
+  </div>
+{% endblock %}
