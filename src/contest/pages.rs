@@ -52,7 +52,7 @@ async fn contest_settings(id: i32, user: Option<ApiUser>, mut db: Connection<DB>
     }
 }
 
-#[get("/submissions/<id>")]
+#[get("/submit/<id>")]
 async fn contest_submissions(id: i32, user: Option<ApiUser>, mut db: Connection<DB>) -> Result<Template, Status> {
     let Some(user) = user else {
         return Err(Status::Unauthorized)
@@ -79,7 +79,7 @@ async fn contest_submissions(id: i32, user: Option<ApiUser>, mut db: Connection<
         return Err(Status::NotFound);
     };
 
-    Ok(Template::render("submissions", context! { contest, subs, jollies, user }))
+    Ok(Template::render("submit", context! { contest, subs, jollies, user }))
 }
 
 #[get("/")]
