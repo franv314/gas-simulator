@@ -10,16 +10,7 @@ function setup_submitter() {
         },
         (response) => {
             if (response.status == 201) {
-                response.json().then(body => {
-                    if (body.correct) {
-                        alert("Risposta esatta!");
-                    } else {
-                        alert("Risposta errata!");
-                    }
-                    document.getElementById("submitter").reset();
-                    if (typeof reload_content !== "undefined") reload_content();
-                    if (typeof hide_submitter !== "undefined") hide_submitter();
-                });
+                response.json().then(body => show_submission_result(body.correct));
             } else {
                 response.json().then(body => {
                     alert(body.error)

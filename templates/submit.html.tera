@@ -14,6 +14,78 @@
       {% include "submitter" %}
     </div>
 
+    <div class="full-width-card" id="submissions-container" {% if not subs %} style="display:none;" {% endif %}>
+      <h1>
+        Risposte consegnate
+      </h1>
+      <div id="submissions-table" class="history-table">
+        <div class="table-header team-cell">
+          <span>Squadra</span>
+        </div>
+        <div class="table-header">
+          <span>Quesito</span>
+        </div>
+        <div class="table-header">
+          <span>Risposta</span>
+        </div>
+        <div class="table-header"></div>
+        {% for sub in subs %}
+          <div class="team-cell">
+            <span>{{ sub.team_name }}</span>
+          </div>
+          <div>
+            <span>{{ sub.question_pos + 1 }}</span>
+          </div>
+          <div>
+            <div class="spoiler {{ sub.correct }}" id="answer-{{ loop.index }}" onclick="toggle_spoiler({{ loop.index }});">
+              <span>{{ sub.given_answer }}</span>
+            </div>
+          </div>
+          <div>
+            <div class="action-button" onclick="delete_submission({{ sub.id }});">
+              <img
+                class="icon"
+                src="/icons/bin.svg"
+                height="20"
+              >
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <div class="full-width-card" id="jollies-container" {% if not jollies %} style="display:none;" {% endif %}>
+      <h1>
+        Jolly scelti
+      </h1>
+      <div id="jollies-table" class="history-table">
+        <div class="table-header team-cell">
+          <span>Squadra</span>
+        </div>
+        <div class="table-header">
+          <span>Quesito</span>
+        </div>
+        <div class="table-header"></div>
+        {% for jolly in jollies %}
+          <div class="team-cell">
+            <span>{{ jolly.team_name }}</span>
+          </div>
+          <div>
+            <span>{{ jolly.question_pos + 1 }}</span>
+          </div>
+          <div>
+            <div class="action-button" onclick="delete_jolly({{ jolly.id }});">
+              <img
+                class="icon"
+                src="/icons/bin.svg"
+                height="20"
+              >
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+
     <a id="ranking-link" class="link-button" href="/contest/{{contest.id}}">
       <div>
         <img

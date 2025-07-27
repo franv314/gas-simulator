@@ -135,7 +135,7 @@ pub async fn fetch_submissions(db: &mut Connection<DB>, user_id: i32, id: i32) -
         .await?
         .into_iter()
         .collect::<HashMap<i32, String>>();
-    
+
     let submissions = submissions::dsl::submissions
         .inner_join(questions::table)
         .inner_join(teams::table)
@@ -151,7 +151,7 @@ pub async fn fetch_submissions(db: &mut Connection<DB>, user_id: i32, id: i32) -
         ))
         .filter(teams::contest_id.eq(id))
         .filter(teams::is_fake.eq(false))
-        .order((submissions::sub_time.asc(), submissions::id.asc()))
+        .order((submissions::sub_time.desc(), submissions::id.asc()))
         .load::<ContestSubmission>(db)
         .await
         .map(|subs| subs.into_iter().map(|sub| Submission {
@@ -195,7 +195,7 @@ pub async fn fetch_jollies(db: &mut Connection<DB>, user_id: i32, id: i32) -> an
         .await?
         .into_iter()
         .collect::<HashMap<i32, String>>();
-    
+
     let jollies = jollies::dsl::jollies
         .inner_join(questions::table)
         .inner_join(teams::table)
@@ -208,7 +208,7 @@ pub async fn fetch_jollies(db: &mut Connection<DB>, user_id: i32, id: i32) -> an
         ))
         .filter(teams::contest_id.eq(id))
         .filter(teams::is_fake.eq(false))
-        .order((jollies::sub_time.asc(), jollies::id.asc()))
+        .order((jollies::sub_time.desc(), jollies::id.asc()))
         .load::<ContestJolly>(db)
         .await
         .map(|jollies| jollies.into_iter().map(|jolly| Jolly {

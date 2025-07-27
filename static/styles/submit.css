@@ -1,0 +1,96 @@
+.history-table {
+    width: 100%;
+    text-align: center;
+    display: grid;
+}
+
+#submissions-table {
+    grid-template-columns: auto max-content max-content max-content;
+}
+
+#jollies-table {
+    grid-template-columns: auto max-content max-content;
+}
+
+.history-table > div {
+    padding: 3px 8px;
+    display: flex;
+}
+
+.history-table > div > span {
+    margin: auto 0;
+    width: 100%;
+}
+
+.table-header {
+    font-weight: bold;
+    font-size: large;
+    margin-bottom: 4px;
+}
+
+.team-cell {
+    text-align: left;
+}
+
+.spoiler {
+    width: 60px;
+    padding: 5px 10px;
+    border-radius: 6px;
+    margin: 0 auto;
+    height: fit-content;
+    user-select: none;
+
+    background-image: url("/icons/eye_open.svg");
+    background-size: 20px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.spoiler > span {
+    visibility: hidden;
+}
+
+.spoiler.visible {
+    background-image: none;
+}
+
+.spoiler.visible > span {
+    visibility: visible;
+}
+
+.spoiler.true {
+    background-color: rgb(80, 222, 80);
+}
+
+.spoiler.false {
+    background-color: rgb(238, 88, 88);
+}
+
+#answer-input.true {
+    animation: correct .8s;
+}
+
+#answer-input.false {
+    animation: incorrect .8s;
+}
+
+@keyframes correct {
+    10% {background-color: rgb(80, 222, 80);}
+    50% {background-color: rgb(80, 222, 80);}
+    100% {background-color: transparent;}
+}
+
+@keyframes incorrect {
+    10% {background-color: rgb(238, 88, 88);}
+    50% {background-color: rgb(238, 88, 88);}
+    100% {background-color: transparent;}
+}
+
+@media (hover: hover) {
+    .spoiler.true:hover {
+        background-color: rgb(61, 213, 61);
+    }
+    .spoiler.false:hover {
+        background-color: rgb(229, 71, 71);
+    }
+}

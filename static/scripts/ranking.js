@@ -48,6 +48,17 @@ function reload_content() {
     })
 }
 
+function show_submission_result(correct) {
+    if (correct) {
+        alert("Risposta esatta!");
+    } else {
+        alert("Risposta errata!");
+    }
+    document.getElementById("submitter").reset();
+    reload_content();
+    hide_submitter();
+}
+
 function hide_fake_teams() {
     Array.from(document.getElementsByClassName("fake-team")).forEach(elem => {
         elem.setAttribute("hidden", "");

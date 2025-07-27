@@ -137,7 +137,8 @@ h1 {
     margin-top: 40px;
 }
 
-.form > h1 {
+.form > h1,
+.full-width-card > h1 {
     text-align: center;
     margin-bottom: 15px;
     font-size: 26px;
