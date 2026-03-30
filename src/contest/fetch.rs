@@ -63,6 +63,7 @@ pub async fn fetch_contest(db: &mut Connection<DB>, user_id: i32, id: i32) -> an
             teams::contest_id,
         ))
         .filter(teams::contest_id.eq(id))
+        .order_by(teams::id.asc())
         .load::<model::TeamWithId>(db)
         .await?;
 
